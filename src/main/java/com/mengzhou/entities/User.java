@@ -35,7 +35,6 @@ public class User {
     public void add(Order order) {
         orders.add(order);
         order.setUser(this);
-
     }
 
 }

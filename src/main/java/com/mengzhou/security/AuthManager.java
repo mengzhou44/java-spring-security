@@ -10,10 +10,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthManager {
 
+    private final TokenHelper  tokenHelper;
+
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthManager(  AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
+    public AuthManager(   TokenHelper  tokenHelper, AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
+        this.tokenHelper = tokenHelper;
         this.adminRepository = adminRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -23,8 +26,8 @@ public class AuthManager {
                 .orElseThrow(() -> new RuntimeException("Admin not found"));
 
         if (passwordEncoder.matches(password, admin.getPassword())) {
-            // generate JWT or return success
-            return ResponseEntity.ok("Authenticated successfully");
+            var token = tokenHelper.generateToken(admin.getName());
+            return ResponseEntity.ok(token);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
