@@ -1,6 +1,4 @@
 package com.mengzhou.entities;
-
-
 import com.mengzhou.security.Role;
 import jakarta.persistence.*;
 import lombok.*;

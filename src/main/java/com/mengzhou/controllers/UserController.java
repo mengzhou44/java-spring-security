@@ -4,15 +4,16 @@ import com.mengzhou.entities.User;
 import com.mengzhou.helpers.PageResponse;
 import com.mengzhou.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/users")
+@EnableMethodSecurity
 public class UserController {
 
     private final UserRepository userRepository;
@@ -29,6 +30,7 @@ public class UserController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public User createUser(@RequestBody User user) {
         return userRepository.save(user);
     }
